@@ -11,20 +11,29 @@ if (isset($_GET['category_id'])) {
         "SELECT * FROM category WHERE category_id={$_GET['category_id']}"
     );
     $stmt->execute();
+
     $edit_category = $stmt->fetch(PDO::FETCH_ASSOC);
     $cat_name = $edit_category['category_name'];
     $cat_desc = $edit_category['category_description'];
-
+	$null_err="";
     if (isset($_POST['submit'])) {
+		$cat_name = $_POST['category_name'];
+		$cat_desc = $_POST['category_desc'];
+		$check = 1;
+		
+		if (empty($cat_name) || empty($cat_desc)) {
+			$null_err = "this field is require";
+			$check = 0;
+		}
+
         $rand = rand(1, 9999);
         $id = $_GET['category_id'];
-        $cat_name = $_POST['category_name'];
-        $cat_desc = $_POST['category_desc'];
         $destination ='../assets/media/avatars/' .$rand .$_FILES['category_image']['name'];
         $cat_image = $rand . $_FILES['category_image']['name'];
 
-		if (($_FILES['sub_category_image']["size"])==0) {
-			$img="";
+		$img = ",category_image ='{$cat_image}'";
+		if ($_FILES['category_image']['size'] == 0) {
+			$img = '';
 		}
 
         if (move_uploaded_file($_FILES['category_image']['tmp_name'],$destination)) {
@@ -32,11 +41,13 @@ if (isset($_GET['category_id'])) {
         } 
 		else 
 		{echo '<h1>not upload</h1>';}
-
-        $update = $connection->prepare("UPDATE category SET category_name ='{$cat_name}',
-				 						category_description='{$cat_desc}',category_image ='{$cat_image}' WHERE category_id={$id}");
+		if ($check==1) {
+			$update = $connection->prepare("UPDATE category SET category_name ='{$cat_name}',
+				 						category_description='{$cat_desc}'{$img} WHERE category_id={$id}");
         $update->execute();
         header('location:../categories.php');
+		}
+        
     }
 }
 ?>
@@ -97,7 +108,9 @@ if (isset($_GET['category_id'])) {
 														class="form-control form-control-lg form-control-solid"
 														 placeholder="Company name" 
 														 value="<?php echo isset($edit_category['category_name']) ? $edit_category['category_name'] : ''; ?>">
-													<div class="fv-plugins-message-container invalid-feedback"></div></div>
+													<div class="fv-plugins-message-container invalid-feedback">
+													<span class="text-danger"><?php echo $null_err ?></span>
+													</div></div>
 												</div>
 
 												<div class="row mb-6">
@@ -109,7 +122,9 @@ if (isset($_GET['category_id'])) {
                )
                    ? $edit_category['category_description']
                    : ''; ?>">
-													<div class="fv-plugins-message-container invalid-feedback"></div></div>
+													<div class="fv-plugins-message-container invalid-feedback">
+													<span class="text-danger"><?php echo $null_err ?></span>
+													</div></div>
 												</div>
 										<!-- <input type="hidden" name="id" value=""> -->
 											</div>

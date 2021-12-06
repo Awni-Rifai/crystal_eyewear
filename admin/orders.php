@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang=en>
-<?php include_once 'layouts/head.php'; ?>
+<?php include_once 'layouts/head.php';
+include_once '../includes/db.php';
+$stmt = $connection->prepare(
+	"SELECT * FROM order_summary INNER JOIN user ON user.id = order_summary.user_id "
+);
+$stmt->execute();
+$order_summary = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// var_dump($order_summary);
+// die;
+if($_GET){
+	$id=$_GET['order_id'];
+$delete = $connection->prepare("DELETE FROM order_summary WHERE order_id ='{$id}'");
+		$delete->execute();
+		header('location:orders.php');
+	}
+?>
 
 <body id=kt_body class="header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed" style=--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px>
 	<div class="d-flex flex-column flex-root">
@@ -19,7 +34,9 @@
 								</div>
 								<div class="card-body pt-0 pb-5">
 									<table class="table align-middle table-row-dashed gy-5" id="kt_table_orders">
+
 										<thead class="border-bottom border-gray-200 fs-7 fw-bolder">
+
 											<tr class="text-start text-muted text-uppercase gs-0">
 												<th>Order ID</th>
 												<th class="min-w-100px">Customer Name</th>
@@ -30,18 +47,35 @@
 											</tr>
 										</thead>
 										<tbody class="fs-6 fw-bold text-gray-600">
+											<?php
+											foreach ($order_summary as $order_data ) {
+												
+											
+											?>
 											<tr>
 												<td>
-													<a href="#" class="text-gray-600 text-hover-primary mb-1">9621-8427</a>
+													<?php echo $order_data['order_id']; ?>
 												</td>
-												<td>admin@email.com</td>
+												<td><?php echo $order_data['username'] ;?></td>
 												<td>
-													<span class="badge badge-light-success">Successful</span>
+													<?php
+													//  echo $order_data['order_status'];
+													 if($order_data['order_status']==="pending"){
+													echo '<span class="badge badge-light-warning">Pending</span>';
+												 }                            
+												 else if($order_data['order_status']==="Rejected"){
+													echo '<span class="badge badge-light-danger">Rejected</span>';
+												 }
+												 else if($order_data['order_status']==="Successful"){
+													echo '<span class="badge badge-light-success">Successful</span>';
+												 }
+												 
+												 ?>
 												</td>
-												<td>$1,200.00</td>
-												<td>14 Dec 2020, 8:43 pm</td>
+												<td><?php echo $order_data['order_total_price'] ?></td>
+												<td><?php echo $order_data['date_of_creation'] ?></td>
 												<td class="pe-0 text-end">
-													<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-customer-payment-method="View" data-bs-original-title="View">
+													<a href="invoice.php?order_id=<?php echo $order_data['order_id']?>" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-customer-payment-method="View" data-bs-original-title="View">
 														<span class="svg-icon svg-icon-muted svg-icon-3">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																<path d="M13 21H3C2.4 21 2 20.6 2 20V4C2 3.4 2.4 3 3 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z" fill="black"></path>
@@ -49,7 +83,7 @@
 															</svg>
 														</span>
 													</a>
-													<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-delete="delete_row" data-bs-original-title="Delete">
+													<a href="orders.php?order_id=<?php echo $order_data['order_id']?>" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" >
 														<span class="svg-icon svg-icon-3">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"></path>
@@ -60,66 +94,9 @@
 													</a>
 												</td>
 											</tr>
-											<tr>
-												<td>
-													<a href="#" class="text-gray-600 text-hover-primary mb-1">9769-5770</a>
-												</td>
-												<td>admin@email.com</td>
-												<td>
-													<span class="badge badge-light-danger">Rejected</span>
-												</td>
-												<td>$450.00</td>
-												<td>03 Sep 2020, 1:08 am</td>
-												<td class="pe-0 text-end">
-													<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-customer-payment-method="View" data-bs-original-title="View">
-														<span class="svg-icon svg-icon-muted svg-icon-3">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M13 21H3C2.4 21 2 20.6 2 20V4C2 3.4 2.4 3 3 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z" fill="black"></path>
-																<path opacity="0.3" d="M17 21H21C21.6 21 22 20.6 22 20V4C22 3.4 21.6 3 21 3H17C16.4 3 16 3.4 16 4V20C16 20.6 16.4 21 17 21Z" fill="black"></path>
-															</svg>
-														</span>
-													</a>
-													<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-delete="delete_row" data-bs-original-title="Delete">
-														<span class="svg-icon svg-icon-3">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"></path>
-																<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black"></path>
-																<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black"></path>
-															</svg>
-														</span>
-													</a>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<a href="#" class="text-gray-600 text-hover-primary mb-1">6513-6088</a>
-												</td>
-												<td>admin@email.com</td>
-												<td>
-													<span class="badge badge-light-warning">Pending</span>
-												</td>
-												<td>$8,700.00</td>
-												<td>01 Sep 2020, 4:58 pm</td>
-												<td class="pe-0 text-end">
-													<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-customer-payment-method="View" data-bs-original-title="View">
-														<span class="svg-icon svg-icon-muted svg-icon-3">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M13 21H3C2.4 21 2 20.6 2 20V4C2 3.4 2.4 3 3 3H13C13.6 3 14 3.4 14 4V20C14 20.6 13.6 21 13 21Z" fill="black"></path>
-																<path opacity="0.3" d="M17 21H21C21.6 21 22 20.6 22 20V4C22 3.4 21.6 3 21 3H17C16.4 3 16 3.4 16 4V20C16 20.6 16.4 21 17 21Z" fill="black"></path>
-															</svg>
-														</span>
-													</a>
-													<a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" data-bs-toggle="tooltip" title="" data-kt-delete="delete_row" data-bs-original-title="Delete">
-														<span class="svg-icon svg-icon-3">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z" fill="black"></path>
-																<path opacity="0.5" d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z" fill="black"></path>
-																<path opacity="0.5" d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z" fill="black"></path>
-															</svg>
-														</span>
-													</a>
-												</td>
-											</tr>
+										
+											
+											<?php }?>
 										</tbody>
 									</table>
 								</div>

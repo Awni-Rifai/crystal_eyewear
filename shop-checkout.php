@@ -1,6 +1,9 @@
 <?php
 require_once  "includes/db.php";
 require_once  "includes/functions.php";
+session_start();
+
+
 $SESSION_TIMEOUT_MINUTES  =15;//minutes
 $EMPTY_BASKET_TIME        =30;//minutes
 
@@ -17,8 +20,10 @@ include("./includes/public-header.php");
 ?>
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
-        <div class="page-header-area" data-bg-img="assets/img/photos/bg3.webp">
-            <div class="container pt--0 pb--0">
+        <div class="container">
+
+        <div class="page-header-area">
+            <div class=" pt--0 pb--0">
                 <div class="row">
                     <div class="col-12">
                         <div class="page-header-content">
@@ -35,6 +40,8 @@ include("./includes/public-header.php");
                 </div>
             </div>
         </div>
+        </div>
+
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Shopping Checkout Area Wrapper ==-->
@@ -55,7 +62,7 @@ include("./includes/public-header.php");
 
                                         </h3>
 
-                                        <div class="card-body">
+                                        <div class="card-body mb-5">
                                             <div class="login-wrap">
                                                 <p>If you have shopped with us before, please enter your details below.
                                                     If you are a new customer, please proceed to the Billing & Shipping
@@ -82,25 +89,7 @@ include("./includes/public-header.php");
                                                             <div class="form-group mt-30">
                                                                 <button name="checkout_login" class="btn-login">Login
                                                                 </button>
-                                                                <div class="rememberme-account">
-                                                                    <div class="custom-control custom-checkbox">
-                                                                        <input type="checkbox"
-                                                                               class="custom-control-input visually-hidden"
-                                                                               id="remembermePass">
-                                                                        <label class="custom-control-label"
-                                                                               for="remembermePass">Remember me</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-6"><a class="lost-password"
-                                                                                          href="#">Lost your
-                                                                            password?</a></div>
-                                                                    <div class="col-6"><a href="account-register.php"
-                                                                                          class="lost-password"
-                                                                                          href="#">sign up</a></div>
-                                                                </div>
-
-
+                                                                <a href='account-register.php' >sign up</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -183,13 +172,24 @@ include("./includes/public-header.php");
                             <tbody class="table-body">
                             <?php
                             $order_total=0;
+                            $price=null;
+                           
                             foreach ($_SESSION['shopping_cart'] as $product):
-                                $order_total+=$product['product_sale_price']??$product['product_price'];
+                                if ($product["product_percentage_price"]) {
+                                    $price=$product['product_price']-((int)$product['product_price'])*(((int)$product['product_percentage_price'])*0.01);
+                                    $price=(int)($price);
+
+                                }
+                                else{
+                                    $price=$product['product_price'];
+                                }
+                                $order_total+=(int)($price)*$product['product_quantity'];
                                 ?>
                                 <tr class="cart-item">
-                                    <td class="product-name"><?php echo $product['product_name'] ?> <span class="product-quantity">× 1</span></td>
-                                    <td class="product-total">$<?php echo $product['product_sale_price']??$product['product_price'] ?></td>
+                                    <td class="product-name"><?php echo $product['product_name'] ?> <span class="product-quantity">× <?php echo $product['product_quantity']?></span></td>
+                                    <td class="product-total">$<?php echo (int)($price)*$product['product_quantity'] ?></td>
                                 </tr>
+
                             <?php endforeach;
                             $_SESSION['order_total']=$order_total;
                             ?>
@@ -204,18 +204,6 @@ include("./includes/public-header.php");
                         </table>
                         <div class="shop-payment-method">
                             <div id="PaymentMethodAccordion">
-                                <div class="card">
-                                    <div class="card-header" id="check_payments3">
-                                        <h5 class="title" data-bs-toggle="collapse" data-bs-target="#itemThree" aria-controls="itemTwo" aria-expanded="false">Cash on delivery</h5>
-                                    </div>
-                                    <div id="itemThree" class="collapse" aria-labelledby="check_payments3" data-bs-parent="#PaymentMethodAccordion">
-                                        <div class="card-body">
-                                            <p>Pay with cash upon delivery.</p>
-                                        </div>
-                                        <!--== End Billing Accordion ==-->
-                                    </div>
-                                </div>
-
                                 <button type="submit" name="submit_order" class="btn-theme">Place order</button>
                             </div>
                   </form>

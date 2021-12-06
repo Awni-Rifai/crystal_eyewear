@@ -15,6 +15,7 @@ if (isset($_GET['product_id'])) {
 	$product_percentage_price  = $product_edited['product_percentage_price'];
 
 	$product_description = $product_edited['product_description'];
+	$featured_product = $product_edited['featured_products'];
 	$product_image = $product_edited['product_image'];
 	$product_category = $product_edited['category_id'];
 	$product_sub_category = $product_edited['sub_category_id'];
@@ -24,6 +25,7 @@ if (isset($_GET['product_id'])) {
 		$product_price  = $_POST['product_price'];
 		$product_percentage_price  = $_POST['product_percentage_price'];
 		$product_description = $_POST['product_description'];
+		$featured_product = $product_edited['featured_products'];
 		$product_category  = $_POST['category'];
 		$product_sub_category  = $_POST['subcategory'];
 		$rand = rand(1, 99999);
@@ -40,11 +42,14 @@ if (isset($_GET['product_id'])) {
 		} else {
 			echo "<h1>image not uploaded</h1>";
 		}
-
+		if (!empty($_POST['featured'])) {
+			$featured_product  = $_POST['featured'];
+		}
 		$update = $connection->prepare("UPDATE products 
 		                                SET   product_name             ='{$product_name}',
 										      product_price            ='{$product_price}',
 											  product_percentage_price = '{$product_percentage_price}',
+											  featured_products        = '{$featured_product}',
 											  product_description      ='{$product_description}'{$image},
 											  category_id              = '{$product_category}',
 											 sub_category_id           = '{$product_sub_category}'
@@ -82,13 +87,19 @@ if (isset($_GET['product_id'])) {
 												</div>
 												<div class=form-text>Allowed file types: png, jpg, jpeg.</div>
 											</div>
-											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Name</label><input name="product_name" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_name']; ?>"></div>
-											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Price </label><input type=number name="product_price" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_price']; ?>"></div>
-											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Percentage Price </label><input type=number name="product_percentage_price" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_percentage_price']; ?>"></div>
-											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Description</label><input type=text name="product_description" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_description']; ?>" description></div>
+											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Name</label><input name="product_name" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_name']; ?>" required></div>
+											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Price </label><input type=number name="product_price" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_price']; ?>" required></div>
+											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Percentage Price </label><input type=number name="product_percentage_price" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_percentage_price']; ?>" required></div>
+											<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Description</label><input type=text name="product_description" class="form-control form-control-solid mb-3 mb-lg-0" value="<?php echo $product_edited['product_description']; ?>" description required></div>
+											<div class="form-check my-5">
+												<input class="form-check-input" type="checkbox" value="1" id="flexCheckChecked" name="featured">
+												<label class="form-check-label" for="flexCheckChecked">
+													featured product
+												</label>
+											</div>
 											<div class=mb-7>
 												<label class="required fs-6 fw-bold mb-2">Category</label>
-												<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="" name="category">
+												<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="" name="category" required>
 													<option value="<?php echo $product_edited['category_id']; ?>"><?php
 																													$sql1 = $connection->prepare("SELECT * FROM category");
 																													$sql1->execute();
@@ -111,17 +122,17 @@ if (isset($_GET['product_id'])) {
 											</div>
 											<div class=mb-7>
 												<label class="required fs-6 fw-bold mb-2">Subcategory</label>
-												<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="" name="subcategory">
+												<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="" name="subcategory" required>
 													<option value="<?php echo $product_edited['sub_category_id']; ?>"><?php
-													$sql1 = $connection->prepare("SELECT * FROM sub_category");
-													$sql1->execute();
-													$result1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
-													foreach ($result1 as $category) {
-														if ($product_edited['sub_category_id'] === $category['sub_category_id']) {
-															echo $category['sub_category_name'];
-														}
-													}
-													?></option>
+																														$sql1 = $connection->prepare("SELECT * FROM sub_category");
+																														$sql1->execute();
+																														$result1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
+																														foreach ($result1 as $category) {
+																															if ($product_edited['sub_category_id'] === $category['sub_category_id']) {
+																																echo $category['sub_category_name'];
+																															}
+																														}
+																														?></option>
 													<?php
 													$sql2 = $connection->prepare("SELECT * FROM sub_category");
 													$sql2->execute();
@@ -133,7 +144,7 @@ if (isset($_GET['product_id'])) {
 												</select>
 											</div>
 										</div>
-										<div class="text-center pt-15"><button type=reset class="btn btn-light me-3" data-kt-users-modal-action=cancel>Discard</button>
+										<div class="text-center pt-15"><a href="http://localhost/Crystal-Eyewear/admin/products.php" id="reset" type=reset class="btn btn-light me-3" data-kt-users-modal-action=cancel>Discard</a>
 											<button name="save" type="submit" class="btn btn-primary"><span class=indicator-label>Save</span>
 												<span class=indicator-progress>Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span></button>
 										</div>

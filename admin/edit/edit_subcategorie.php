@@ -4,6 +4,8 @@
 include_once 'layouts/head.php';
 include_once '../../includes/db.php';
 
+
+
 if (isset($_GET['sub_category_id'])) {
 	$id = $_GET['sub_category_id'];
 	$stmt = $connection->prepare(
@@ -32,37 +34,21 @@ if (isset($_GET['sub_category_id'])) {
 			$check = 0;
 		}
 
-
-
-
-
-
 		$rand = rand(1, 9999);
 		$id = $_GET['sub_category_id'];
-
-
-
 		$sub_cat_image = $rand . $_FILES['sub_category_image']['name'];
-		$destination =
-			'../assets/media/avatars/' .
-			$rand .
-			$_FILES['sub_category_image']['name'];
-		$img = ",sub_category_image ='{$sub_cat_image}'";
+		$destination ='../assets/media/avatars/' .$rand .$_FILES['sub_category_image']['name'];
 
+		$img = ",sub_category_image ='{$sub_cat_image}'";
 		if ($_FILES['sub_category_image']['size'] == 0) {
 			$img = '';
 		}
 
-		if (
-			move_uploaded_file(
-				$_FILES['sub_category_image']['tmp_name'],
-				$destination
-			)
-		) {
-			echo '<h1>yes upload</h1>';
-		} else {
+		if (move_uploaded_file($_FILES['sub_category_image']['tmp_name'],$destination)) {
+			echo '<h1>yes upload</h1>';} 
+			else {
 			echo '<h1>not upload</h1>';
-		}
+			}
 		if ($check == 1) {
 
 

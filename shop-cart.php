@@ -1,12 +1,25 @@
 <?php
-require_once "includes/db.php";
 session_start();
-if(isset($_GET['delete'])){
-    $id=$_GET['delete'];
-    $i=0;
-    foreach ($_SESSION['shopping_cart'] as $product){
-        if($product['product_id']===$id){
-            if(count($_SESSION['shopping_cart'])===1){
+
+require_once "includes/db.php";
+$cartCheck=isset($_SESSION['shopping_cart']);
+
+//clear cart
+if($cartCheck){
+    if(isset($_GET['clear_cart'])){
+        unset($_SESSION['shopping_cart']);
+        header("Location: shop-cart.php");
+        exit();
+    }
+
+}
+//delete the cart
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $i = 0;
+    foreach ($_SESSION['shopping_cart'] as $product) {
+        if ($product['product_id'] === $id) {
+            if (count($_SESSION['shopping_cart']) === 1) {
                 unset($_SESSION['shopping_cart']);
                 header("Location:shop-cart.php");
             }
@@ -16,63 +29,108 @@ if(isset($_GET['delete'])){
         $i++;
     }
 }
-
-
+//----------------------------------------------------------------
+//adding to the shopping cart
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
+    $quantity=$_GET['quantity']??1;
     //check if the product is already in the session
-    $check=false;
-    if(isset($_SESSION['shopping_cart'])) {
+    $check = false;
+    $products_counter=0;
+    if (isset($_SESSION['shopping_cart'])) {
+        //loop through all products in the session to check if it's excists
+
         foreach ($_SESSION['shopping_cart'] as $product) {
             if ($id === $product["product_id"]) {
                 $check = true;
+                $_SESSION['shopping_cart'][$products_counter]['product_quantity']=$quantity;
             }
+            $products_counter++;
         }
+    } else {
+        $check = false;
     }
-        else{
-            $check=false;
-        }
-
-
-            if(!$check){
-
-                $statement = $connection->prepare("SELECT * FROM products WHERE product_id=:id");
-                $statement->bindValue(":id", $id);
-                $statement->execute();
-                $product = $statement->fetch(PDO::FETCH_ASSOC);
-                $_SESSION['shopping_cart'][]= $product;
-
+    if (!$check) {
+        $statement = $connection->prepare("SELECT * FROM products WHERE product_id=:id");
+        $statement->bindValue(":id", $id);
+        $statement->execute();
+        $product = $statement->fetch(PDO::FETCH_ASSOC);
+        if ($product):
+            $_SESSION['shopping_cart'][] =$product;
+            $_SESSION['shopping_cart'][$products_counter]["product_quantity"]=(int)$quantity;
+            $products_counter++;
+            if(isset($_GET['shop'])){
+                header("location:shop.php");
+                exit();
             }
 
-        //add only if it's not stored in the database;
 
+        endif;
 
+    }
+    else{
+        if(isset($_GET['shop'])){
+            header("location:shop.php");
+            exit();
+        }
 
+    }
 
 }
+//-------------------------------------------
+//update shopping cart
+if(isset($_GET['update'])){
+    if(!$cartCheck){
+        header("location: shop-cart.php");
+        exit();
+    }
+    if($cartCheck):
+    $total_products=count($_SESSION['shopping_cart']);
+    for($i=0;$i<$total_products;$i++){
+        if($_SESSION['shopping_cart'][$i]['product_id'])
+        $product_id= $_SESSION['shopping_cart'][$i]['product_id'];
+
+        //if(($_GET["quantity{$product_id}"]!==1)):
+        $_SESSION['shopping_cart'][$i]['product_quantity']=(int)$_GET["quantity{$product_id}"];
+        //endif;
+    }
+
+
+    endif;
+
+    
+}
+// var_dump($_SESSION['shopping_cart']);
+// die;
+//
 include("./includes/public-header.php");
 
 ?>
+
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
-        <div class="page-header-area" data-bg-img="assets/img/photos/bg3.webp">
+        <div class="container">
+
+        <div class="page-header-area" >
             <div class="container pt--0 pb--0">
                 <div class="row">
                     <div class="col-12">
                         <div class="page-header-content">
                             <h2 class="title" data-aos="fade-down" data-aos-duration="1000">Shopping Cart</h2>
-                            <nav class="breadcrumb-area" data-aos="fade-down" data-aos-duration="1200">
+                        </div>
+                        <nav class="breadcrumb-area" data-aos="fade-down" data-aos-duration="1200">
                                 <ul class="breadcrumb">
                                     <li><a href="index.php">Home</a></li>
                                     <li class="breadcrumb-sep">//</li>
                                     <li>Shopping Cart</li>
                                 </ul>
                             </nav>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Blog Area Wrapper ==-->
@@ -81,7 +139,7 @@ include("./includes/public-header.php");
                 <div class="row">
                     <div class="col-md-12">
                         <div class="shopping-cart-form table-responsive">
-                            <form action="#" method="post">
+                            <form action="" method="get">
                                 <table class="table text-center">
                                     <thead>
                                     <tr>
@@ -94,187 +152,90 @@ include("./includes/public-header.php");
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php if(!isset($_SESSION['shopping_cart'])): ?>
-                                        <h1>Your cart is empty</h1>
-                                    <?php endif;?>
-
+                                    <?php if (!isset($_SESSION['shopping_cart'])): ?>
+                                        <h4 class="center-cart" >Your cart is empty</h4>
+                                    <?php endif; ?>
                                     <?php
+                                    if (isset($_SESSION["shopping_cart"])):
+                                        $i=0;
 
-                                    if(isset($_SESSION["shopping_cart"])):
-                                    foreach ($_SESSION["shopping_cart"] as $product):?>
-                                    <tr class="cart-product-item">
-                                        <td class="product-remove">
-                                            <a href="shop-cart.php?delete=<?php echo $product['product_id'] ?>"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                        <td class="product-thumb">
-                                            <a href="single-product.php">
-                                                <img src="assets/img/shop/product-mini/3.webp" width="90" height="110"
-                                                     alt="Image-HasTech">
-                                            </a>
-                                        </td>
-                                        <td class="product-name">
-                                            <h4 class="title"><a href="single-normal-product.php?id=<?php echo $product['product_id']?>"><?php echo $product['product_name'] ?></a></h4>
-                                        </td>
-                                        <td class="product-price">
-                                            <span class="price">$<?php echo $product['product_sale_price']??$product['product_price'] ?></span>
-                                        </td>
-                                        <td class="product-quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" class="quantity" title="Quantity" value="1">
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">
-                                            <span class="price">$<?php echo $product['product_sale_price']??$product['product_price'] ?></span>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach;
+
+                                        foreach ($_SESSION["shopping_cart"] as $product):
+                                            $price=0;
+                                            $order_total=0;
+                                            if ($product["product_percentage_price"]) {
+                                                $price=$product['product_price']-((int)$product['product_price'])*(((int)$product['product_percentage_price'])*0.01);
+                                                $price=(int)$price;
+
+                                            }
+                                            else{
+                                            $price=$product['product_price'];
+                                            }
+                                            $order_total+=(int)($price)*$product['product_quantity'];
+                                            ?>
+                                            <tr class="cart-product-item">
+                                                <td class="product-remove">
+                                                    <a href="shop-cart.php?delete=<?php echo $product['product_id'] ?>"><i
+                                                                class="fa fa-trash-o"></i></a>
+                                                </td>
+                                                <td class="product-thumb">
+                                                    <a href="single-product.php">
+                                                        <img src="<?php echo "admin/assets/media/products_images/{$product['product_image']}" ?>" width="90"
+                                                             height="110"
+                                                             alt="<?php echo $product['product_description']; ?>">
+                                                    </a>
+                                                </td>
+                                                <td class="product-name">
+                                                    <h4 class="title"><a
+                                                                href="single-product.php?id=<?php echo $product['product_id'] ?>"><?php echo $product['product_name'] ?></a>
+                                                    </h4>
+                                                </td>
+                                                <td class="product-price">
+                                                        <span class="price">$<?php echo $price;?></span>
+                                                </td>
+                                                <td class="product-quantity">
+                                                    <div><?php echo $product['product_quantity']?? "1"; ?></div>
+                                                    <div class="pro-qty">
+                                                        <input type="text" name="quantity<?php echo $product['product_id'];?>" value="<?php echo $product['product_quantity']?>" class="quantity"
+                                                               title="Quantity" value="1">
+                                                    </div>
+
+
+                                                </td>
+                                                <td class="product-subtotal">
+                                                    <span class="price">$<?php echo $order_total ?></span>
+                                                </td>
+                                            </tr>
+                                        <?php $i++; endforeach;
                                     endif;
                                     ?>
+
+
                                     <tr class="actions">
                                         <td class="border-0" colspan="6">
-                                            <button type="submit" class="update-cart" disabled>Update cart</button>
-                                            <button type="submit" class="clear-cart">Clear Cart</button>
-                                            <a href="shop.php" class="btn-theme btn-flat">Continue Shopping</a>
+                                            <button type="submit" name="update" class="update-cart">Update cart</button>
+                                           <button type="button"> <a  href="shop-cart.php?clear_cart=true" class="clear-cart">Clear Cart</a></button>
+                                            <a href="shop.php" >Continue Shopping</a>
                                         </td>
+
                                     </tr>
+                                    <tr class="actions">
+                                        <td class="border-0" colspan="9">
+                                        <a class="btn-theme btn-flat22" href="shop-checkout.php">Proceed to checkout</a>
+
+                                        </td>
+
+                                    </tr>
+
                                     </tbody>
                                 </table>
+
                             </form>
+
                         </div>
                     </div>
                 </div>
-                <div class="row row-gutter-50">
-                    <div class="col-md-6 col-lg-4">
-                        <div id="CategoriesAccordion" class="shipping-form-calculate">
-                            <div class="section-title-cart">
-                                <h5 class="title">Calculate Shipping</h5>
-                                <div class="desc">
-                                    <p>Estimate your shipping fee *</p>
-                                </div>
-                            </div>
-                            <span data-bs-toggle="collapse" data-bs-target="#CategoriesTwo" aria-expanded="true"
-                                  role="button">Calculate shipping</span>
-                            <div id="CategoriesTwo" class="collapse show" data-bs-parent="#CategoriesAccordion">
-                                <form action="#" method="post">
-                                    <div class="row row-gutter-50">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="visually-hidden" for="FormCountry">State</label>
-                                                <select id="FormCountry" class="form-control">
-                                                    <option selected>Select a country…</option>
-                                                    <option>...</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="stateCounty" class="visually-hidden">State / County</label>
-                                                <input type="text" id="stateCounty" class="form-control"
-                                                       placeholder="State / County">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="townCity" class="visually-hidden">Town / City</label>
-                                                <input type="text" id="townCity" class="form-control"
-                                                       placeholder="Town / City">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="postcodeZip" class="visually-hidden">Postcode / ZIP</label>
-                                                <input type="text" id="postcodeZip" class="form-control"
-                                                       placeholder="Postcode / ZIP">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <button type="submit" class="update-totals">Update totals</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="shipping-form-coupon">
-                            <div class="section-title-cart">
-                                <h5 class="title">Coupon Code</h5>
-                                <div class="desc">
-                                    <p>Enter your coupon code if you have one.</p>
-                                </div>
-                            </div>
-                            <form action="#" method="post">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="couponCode" class="visually-hidden">Coupon Code</label>
-                                            <input type="text" id="couponCode" class="form-control"
-                                                   placeholder="Enter your coupon code..">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <button type="submit" class="coupon-btn">Apply coupon</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-lg-4">
-                        <div class="shipping-form-cart-totals">
-                            <div class="section-title-cart">
-                                <h5 class="title">Cart totals</h5>
-                            </div>
-                            <div class="cart-total-table">
-                                <table class="table">
-                                    <tbody>
-                                    <tr class="cart-subtotal">
-                                        <td>
-                                            <p class="value">Subtotal</p>
-                                        </td>
-                                        <td>
-                                            <p class="price">£128.00</p>
-                                        </td>
-                                    </tr>
-                                    <tr class="shipping">
-                                        <td>
-                                            <p class="value">Shipping</p>
-                                        </td>
-                                        <td>
-                                            <ul class="shipping-list">
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio1" checked>
-                                                    <label for="radio1"><span></span> Flat Rate</label>
-                                                </li>
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio2">
-                                                    <label for="radio2"><span></span> Free Shipping</label>
-                                                </li>
-                                                <li class="radio">
-                                                    <input type="radio" name="shipping" id="radio3">
-                                                    <label for="radio3"><span></span> Local Pickup</label>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr class="order-total">
-                                        <td>
-                                            <p class="value">Total</p>
-                                        </td>
-                                        <td>
-                                            <p class="price">£128.00</p>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <a class="btn-theme btn-flat" href="shop-checkout.php">Proceed to checkout</a>
-                        </div>
-                    </div>
-                </div>
+           
             </div>
         </section>
         <!--== End Blog Area Wrapper ==-->

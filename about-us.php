@@ -1,27 +1,28 @@
 <?php
+    session_start();
     include("./includes/public-header.php");
 ?>
   <main class="main-content">
-    <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="assets/img/photos/bg3.webp">
-      <div class="container pt--0 pb--0">
+  <div class="container">
+<div class="page-header-area" data-bg-img="assets/img/photos/sunglasses_banner_pc.jpg">>
+    <div class="container pt--0 pb--0">
         <div class="row">
-          <div class="col-12">
-            <div class="page-header-content">
-              <h2 class="title" data-aos="fade-down" data-aos-duration="1000">About Us</h2>
-              <nav class="breadcrumb-area" data-aos="fade-down" data-aos-duration="1200">
-                <ul class="breadcrumb">
-                  <li><a href="index.php">Home</a></li>
-                  <li class="breadcrumb-sep">//</li>
-                  <li>About Us</li>
-                </ul>
-              </nav>
+            <div class="col-12">
+                <div class="page-header-content">
+                    <h2 class="title" data-aos="fade-down" data-aos-duration="1000">About-Us</h2>
+                </div>
+                <nav class="breadcrumb-area" data-aos="fade-down" data-aos-duration="1200">
+                        <ul class="breadcrumb">
+                            <li><a href="index.php">Home</a></li>
+                            <li class="breadcrumb-sep">//</li>
+                            <li>About-Us</li>
+                        </ul>
+                    </nav>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    <!--== End Page Header Area Wrapper ==-->
+</div>
+</div>
 
     <!--== Start About Area Wrapper ==-->
     <section class="about-area about-default-wrapper">
@@ -32,7 +33,7 @@
               <div class="about-thumb">
                 <div class="shape-one scene">
                   <span class="scene-layer" data-depth=".2">
-                    <img src="assets/img/about/1.webp" width="570" height="368" alt="Image-HasTech">
+                    <img src="assets/img/photos/AdobeStock_208000726.jpeg" width="450" height="300" alt="Image-HasTech">
                   </span>
                 </div>
               </div>
@@ -40,8 +41,12 @@
             <div class="col-lg-6">
               <div class="about-content">
                 <h4 class="sub-title">Smart Life</h4>
-                <h3 class="title">With Smart Shoes</h3>
-                <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmol tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minivel quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidata non proident, sunt in culpa qui officia.</p>
+                <h3 class="title">With Smart looks</h3>
+                <p class="desc">Frames come in a variety of colors, shapes, and sizes, and since we all have different preferences, 
+                            it is important to take the time to select the perfect fashion and fit. Our licensed opticians are trained to help you choose the size and shape that best fits your features and appeals to your unique sense of style. We offer:
+                            atest designer selection of frames to choose from.
+                            Specialty eyewear including children’s, sports goggles, sunglasses, swim goggles.
+                            In addition to a wide variety of frames to choose from, we offer the most advanced lenses and treatments to provide you with the best possible vision. Based on the recommendations of your doctor, our opticians will demonstrate specific technologies designed to address your individual visual needs.</p>
                 <a class="btn-theme" href="contact.php">Contact Us</a>
               </div>
             </div>
@@ -56,11 +61,10 @@
       <div class="container pt--0 pb--0">
         <div class="row divider-wrap divider-style1">
           <div class="col-lg-6">
-            <div class="divider-content" data-title="NEW">
-              <h4 class="sub-title">Saving 50%</h4>
-              <h2 class="title">All Online Store</h2>
-              <p class="desc">Offer Available All Shoes & Products</p>
-              <a class="btn-theme" href="shop.php">Shop Now</a>
+            <div class="divider-content">
+              <h4 class="sub-title">A new way</h4>
+              <h2 class="title">To view our world</h2>
+              <p class="desc">Welcome to Crystal-Eyewear</p>
             </div>
           </div>
         </div>
@@ -71,105 +75,6 @@
     </section>
     <!--== End Divider Area Wrapper ==-->
 
-    <!--== Start Team Area Wrapper ==-->
-    <section class="team-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="section-title text-center">
-              <h3 class="title">Our Team</h3>
-              <div class="desc">
-                <p>There are many variations of passages of Lorem Ipsum available</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-6 col-lg-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="about-us.php"><img src="assets/img/team/1.webp" width="270" height="270" alt="Image-HasTech"></a>
-                  <div class="member-icons">
-                    <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
-                    <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
-                    <a href="https://www.pinterest.com/" target="_blank" rel="noopener"><i class="fa fa-pinterest-p"></i></a>
-                  </div>
-                </div>
-                <div class="content">
-                  <h4 class="title"><a href="about-us.php">Jander Durham</a></h4>
-                  <p>Team Member</p>
-                </div>
-              </div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="about-us.php"><img src="assets/img/team/2.webp" width="270" height="270" alt="Image-HasTech"></a>
-                  <div class="member-icons">
-                    <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
-                    <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
-                    <a href="https://www.pinterest.com/" target="_blank" rel="noopener"><i class="fa fa-pinterest-p"></i></a>
-                  </div>
-                </div>
-                <div class="content">
-                  <h4 class="title"><a href="about-us.php">Jaren Hammer</a></h4>
-                  <p>Team Member</p>
-                </div>
-              </div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="about-us.php"><img src="assets/img/team/3.webp" width="270" height="270" alt="Image-HasTech"></a>
-                  <div class="member-icons">
-                    <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
-                    <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
-                    <a href="https://www.pinterest.com/" target="_blank" rel="noopener"><i class="fa fa-pinterest-p"></i></a>
-                  </div>
-                </div>
-                <div class="content">
-                  <h4 class="title"><a href="about-us.php">Nurdan Denkel</a></h4>
-                  <p>Team Member</p>
-                </div>
-              </div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <!--== Start Team Item ==-->
-            <div class="team-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="about-us.php"><img src="assets/img/team/4.webp" width="270" height="270" alt="Image-HasTech"></a>
-                  <div class="member-icons">
-                    <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
-                    <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
-                    <a href="https://www.pinterest.com/" target="_blank" rel="noopener"><i class="fa fa-pinterest-p"></i></a>
-                  </div>
-                </div>
-                <div class="content">
-                  <h4 class="title"><a href="about-us.php">Monroe Bond</a></h4>
-                  <p>Team Member</p>
-                </div>
-              </div>
-            </div>
-            <!--== End Team Item ==-->
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== End Team Area Wrapper ==-->
-
     <!--== Start Testimonial Area Wrapper ==-->
     <section class="testimonial-area bg-color-f2 position-relative z-index-1">
       <div class="container">
@@ -178,7 +83,7 @@
             <div class="section-title text-center">
               <h3 class="title">Client Feedback</h3>
               <div class="desc">
-                <p>There are many variations of passages of Lorem Ipsum available</p>
+                <p>These are real customer reviwes from people who love our website</p>
               </div>
             </div>
           </div>
@@ -192,13 +97,15 @@
                   <div class="testimonial-item">
                     <div class="testi-inner-content">
                       <div class="testi-thumb">
-                        <img src="assets/img/testimonial/1.webp" width="90" height="90" alt="Image-HasTech">
+                        <img src="assets/img/testimonial/Alaa.png" width="90" height="90" alt="Image-HasTech">
                       </div>
                       <div class="testi-content">
-                        <p>Lorem ipsum dolor sit amel adipiscing elit, sed do eiusll tempor incididunt ut laborj et dolore magna.</p>
+                        <p>The shipping was very fast and the package came well secured 
+                          so it arrived in perfect condition! 
+                          I love the quality of the glasses and can not wait .</p>
                         <div class="testi-author">
                           <div class="testi-info">
-                            <span class="name"><a href="about-us.php">Jaren Hammer</a></span>
+                            <span class="name"><a href="about-us.php">Ala'a Mohammad</a></span>
                           </div>
                         </div>
                         <div class="testi-quote"><img src="assets/img/icons/quote1.webp" width="62" height="44" alt="Image-HasTech"></div>
@@ -212,13 +119,15 @@
                   <div class="testimonial-item">
                     <div class="testi-inner-content">
                       <div class="testi-thumb">
-                        <img src="assets/img/testimonial/2.webp" width="90" height="90" alt="Image-HasTech">
+                        <img src="assets/img/testimonial/salameh.jfif" width="90" height="90" alt="Image-HasTech">
                       </div>
                       <div class="testi-content">
-                        <p>Lorem ipsum dolor sit amel adipiscing elit, sed do eiusll tempor incididunt ut laborj et dolore magna.</p>
+                        <p>I loved the 2 pairs that I purchased through Crystal-Eyewear' website.
+                           The packaging was thoughtful, with the drawstring pouches, 
+                           </p>
                         <div class="testi-author">
                           <div class="testi-info">
-                            <span class="name"><a href="about-us.php">Dorian Cordova</a></span>
+                            <span class="name"><a href="about-us.php">Salameh Yasin</a></span>
                           </div>
                         </div>
                         <div class="testi-quote"><img src="assets/img/icons/quote1.webp" width="62" height="44" alt="Image-HasTech"></div>
@@ -240,88 +149,6 @@
       </div>
     </section>
     <!--== End Testimonial Area Wrapper ==-->
-
-    <!--== Start Blog Area Wrapper ==-->
-    <section class="blog-area blog-default-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="section-title text-center">
-              <h3 class="title">Latest Blog</h3>
-              <div class="desc">
-                <p>There are many variations of passages of Lorem Ipsum available</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-lg-4">
-            <!--== Start Blog Item ==-->
-            <div class="post-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="blog-details.php"><img src="assets/img/blog/1.webp" width="370" height="260" alt="Image-HasTech"></a>
-                </div>
-                <div class="content">
-                  <div class="meta-post">
-                    <ul>
-                      <li class="post-date"><i class="fa fa-calendar"></i><a href="blog.php">27,Jun 2030</a></li>
-                      <li class="author-info"><i class="fa fa-user"></i><a href="blog.php">Oaklee Odom</a></li>
-                    </ul>
-                  </div>
-                  <h4 class="title"><a href="blog-details.php">Lorem ipsum dolor ametcons adipisicing elit sed</a></h4>
-                  <a class="post-btn" href="blog.php">Read More</a>
-                </div>
-              </div>
-            </div>
-            <!--== End Blog Item ==-->
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <!--== Start Blog Item ==-->
-            <div class="post-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="blog-details.php"><img src="assets/img/blog/2.webp" width="370" height="260" alt="Image-HasTech"></a>
-                </div>
-                <div class="content">
-                  <div class="meta-post">
-                    <ul>
-                      <li class="post-date"><i class="fa fa-calendar"></i><a href="blog.php">27,Jun 2030</a></li>
-                      <li class="author-info"><i class="fa fa-user"></i><a href="blog.php">Oaklee Odom</a></li>
-                    </ul>
-                  </div>
-                  <h4 class="title"><a href="blog-details.php">Celebrity Daughter Opens About Upto Having Her Eye</a></h4>
-                  <a class="post-btn" href="blog.php">Read More</a>
-                </div>
-              </div>
-            </div>
-            <!--== End Blog Item ==-->
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <!--== Start Blog Item ==-->
-            <div class="post-item">
-              <div class="inner-content">
-                <div class="thumb">
-                  <a href="blog-details.php"><img src="assets/img/blog/3.webp" width="370" height="260" alt="Image-HasTech"></a>
-                </div>
-                <div class="content">
-                  <div class="meta-post">
-                    <ul>
-                      <li class="post-date"><i class="fa fa-calendar"></i><a href="blog.php">27,Jun 2030</a></li>
-                      <li class="author-info"><i class="fa fa-user"></i><a href="blog.php">Oaklee Odom</a></li>
-                    </ul>
-                  </div>
-                  <h4 class="title"><a href="blog-details.php">Romantic Love Stories Of Hollywood Popular Celebrities</a></h4>
-                  <a class="post-btn" href="blog.php">Read More</a>
-                </div>
-              </div>
-            </div>
-            <!--== End Blog Item ==-->
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== End Blog Area Wrapper ==-->
   </main>
 
 <?php

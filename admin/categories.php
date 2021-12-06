@@ -28,12 +28,24 @@ $stmt->execute();
 $cats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_GET) {
+
     $id = $_GET['category_id'];
-    $delete = $connection->prepare(
-        "DELETE FROM category WHERE category_id ='{$id}'"
-    );
-    $delete->execute();
-    header('location:categories.php');
+	$stmt_category = $connection->prepare("SELECT * FROM sub_category WHERE category_id = {$id}");
+	$stmt_category->execute();
+	$category = $stmt_category->fetchAll(PDO::FETCH_COLUMN);
+	$num_of_categories=count($category);
+	if($num_of_categories>0){
+		$remove_category_erorr=true;
+	}
+	// else if($num_of_categories==0){
+		
+	// 	$remove_category_erorr1=true;
+	// }
+	else{
+		$delete = $connection->prepare("DELETE FROM category WHERE category_id ='{$id}'");
+		$delete->execute();
+		header('location:categories.php');
+		}
 }
 
 include_once 'layouts/head.php';
@@ -172,6 +184,19 @@ include_once 'layouts/head.php';
 									</div>
 								</div>
 								<div class="card-body pt-0">
+								<?php if (isset($remove_category_erorr)) {?>
+														<div class="alert alert-danger" role="alert">
+														<h4 class="alert-heading">You must delete all subcategories and the products that related to them in order to delete this category</h4>
+													  </div>
+													<?php } ?>
+													<?php if (isset($remove_category_erorr1)) {?>
+														<div class="alert alert-danger" role="alert">
+														<h4 class="alert-heading"> this category has products related to it and has no sub-category please relate it to a sub_category or remove all the products that are related to it.</h4>
+													  </div>
+													<?php } ?>
+
+
+
 									<table class="table align-middle table-row-dashed fs-6 gy-5" id=kt_table_categorys>
 										<thead>
 											<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
@@ -195,9 +220,7 @@ include_once 'layouts/head.php';
 												<td class="d-flex align-items-center">
 													<div class="symbol  symbol-50px overflow-hidden me-3">
 														
-															<div ><img src=assets/media/avatars/<?php echo $cat[
-                   'category_image'
-               ]; ?>  width="75px" height="75px"></div>
+															<div ><img src=assets/media/avatars/<?php echo $cat['category_image']; ?> width="75px" height="75px"></div>
 														
 													</div>
 												</td>
@@ -239,11 +262,6 @@ include_once 'layouts/head.php';
 															</svg>
 														</span>
 													</a>
-
-
-
-
-
 												</td>
 											</tr>
 											<?php } ?>

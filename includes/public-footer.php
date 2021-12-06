@@ -10,10 +10,10 @@
               <div class="about-widget-wrap">
                 <div class="widget-logo-area">
                   <a href="index.php">
-                    <img class="logo-main" src="assets/img/logo-light.webp" width="131" height="34" alt="Logo" />
+                    <img class="logo-main" src="assets/img/logo.webp" width="131" height="34" alt="Logo" />
                   </a>
                 </div>
-                <p class="desc">Lorem ipsum dolor sit amet consl adipisi elit, sed do eiusmod templ incididunt ut labore</p>
+                <p class="desc">Through the following links you can access our social media pages. Enjoy!!!</p>
                 <div class="social-icons">
                   <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
                   <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
@@ -27,17 +27,17 @@
           <div class="col-md-6 col-lg-3">
             <!--== Start widget Item ==-->
             <div class="widget-item widget-services-item">
-              <h4 class="widget-title">Services</h4>
+              <h4 class="widget-title">Company partners</h4>
               <h4 class="widget-collapsed-title collapsed" data-bs-toggle="collapse" data-bs-target="#widgetId-1">Services</h4>
               <div id="widgetId-1" class="collapse widget-collapse-body">
                 <div class="collapse-body">
                   <div class="widget-menu-wrap">
                     <ul class="nav-menu">
-                      <li><a href="contact.php">Home monitoring</a></li>
-                      <li><a href="contact.php">Air Filters</a></li>
-                      <li><a href="contact.php">Professional installation</a></li>
-                      <li><a href="contact.php">Smart Buildings</a></li>
-                      <li><a href="contact.php">For contractors</a></li>
+                      <li><a href="https://www.glasses.com/">glasses.com</a></li>
+                      <li><a href="https://www.zennioptical.com/">zennioptical.com</a></li>
+                      <li><a href="https://www.glassesdirect.co.uk/">glassesdirect.co</a></li>
+                      <li><a href="https://www.sunglasshut.com/">sunglasshut</a></li>
+                      <li><a href="https://www.ray-ban.com">ray-ban.com</a></li>
                     </ul>
                   </div>
                 </div>
@@ -96,7 +96,7 @@
       <div class="container pt--0 pb--0">
         <div class="row">
           <div class="col-md-7 col-lg-6">
-            <p class="copyright">© 2021 Shome. Made with <i class="fa fa-heart"></i> by <a target="_blank" href="https://themeforest.net/user/codecarnival/portfolio">Codecarnival.</a></p>
+            <p class="copyright">© 2021 Crystal-Eywear. Made with <i class="fa fa-heart"></i> by <a target="_blank" href="/index.php">Crystals.</a></p>
           </div>
           <div class="col-md-5 col-lg-6">
             <div class="payment">
@@ -110,66 +110,6 @@
   </footer>
   <!--== End Footer Area Wrapper ==-->
 
-  <!--== Scroll Top Button ==-->
-  <div id="scroll-to-top" class="scroll-to-top"><span class="fa fa-angle-up"></span></div>
-
-  <!--== Start Quick View Menu ==-->
-  <aside class="product-quick-view-modal">
-    <div class="product-quick-view-inner">
-      <div class="product-quick-view-content">
-        <button type="button" class="btn-close">
-          <span class="close-icon"><i class="fa fa-close"></i></span>
-        </button>
-        <div class="row align-items-center">
-          <div class="col-lg-6 col-md-6 col-12">
-            <div class="thumb">
-              <img src="assets/img/shop/product-single/1.webp" width="570" height="541" alt="Alan-Shop">
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-12">
-            <div class="content">
-              <h4 class="title">Space X Bag For Office</h4>
-              <div class="prices">
-                <del class="price-old">$85.00</del>
-                <span class="price">$70.00</span>
-              </div>
-              <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,</p>
-              <div class="quick-view-select">
-                <div class="quick-view-select-item">
-                  <label for="forSize" class="form-label">Size:</label>
-                  <select class="form-select" id="forSize" required>
-                    <option selected value="">s</option>
-                    <option>m</option>
-                    <option>l</option>
-                    <option>xl</option>
-                  </select>
-                </div>
-                <div class="quick-view-select-item">
-                  <label for="forColor" class="form-label">Color:</label>
-                  <select class="form-select" id="forColor" required>
-                    <option selected value="">red</option>
-                    <option>green</option>
-                    <option>blue</option>
-                    <option>yellow</option>
-                    <option>white</option>
-                  </select>
-                </div>
-              </div>
-              <div class="action-top">
-                <div class="pro-qty">
-                  <input type="text" id="quantity20" title="Quantity" value="1" />
-                </div>
-                <button class="btn btn-black">Add to cart</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="canvas-overlay"></div>
-  </aside>
-  <!--== End Quick View Menu ==-->
-
   <!--== Start Aside Cart Menu ==-->
   <div class="aside-cart-wrapper offcanvas offcanvas-end" tabindex="-1" id="AsideOffcanvasCart" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
@@ -178,27 +118,35 @@
     </div>
     <div class="offcanvas-body">
       <ul class="aside-cart-product-list">
+          <?php
+          if(isset($_SESSION['shopping_cart'])):
+            $order_total=0;
+            $price=null;
+           
+            foreach ($_SESSION['shopping_cart'] as $product):
+                if ($product['product_sale_price']) {
+                    $price=$product['product_sale_price'];
+                }
+                else{
+                $price=$product['product_price'];
+                }
+                $order_total+=(int)($price)*$product['product_quantity'];
+              ?>
+
         <li class="product-list-item">
-          <a href="#/" class="remove">×</a>
-          <a href="single-product.php">
-            <img src="assets/img/shop/product-mini/1.webp" width="90" height="110" alt="Image-HasTech">
-            <span class="product-title">Leather Mens Slipper</span>
+<!--          <a href="" class="remove">×</a>-->
+          <a href="single-product.php?id=<?php echo $product['product_id'] ?>">
+            <img src="<?php echo "admin/assets/media/products_images/{$product['product_image']}";?>" width="90" height="110" alt="Image-HasTech">
+            <span class="product-title"><?php echo $product['product_name'] ?></span>
           </a>
-          <span class="product-price">1 × £69.99</span>
+          <span class="product-price"><?php echo $product['product_quantity'] ?> × <?php echo $price ?></span>
         </li>
-        <li class="product-list-item">
-          <a href="#/" class="remove">×</a>
-          <a href="single-product.php">
-            <img src="assets/img/shop/product-mini/2.webp" width="90" height="110" alt="Image-HasTech">
-            <span class="product-title">Quickiin Mens shoes</span>
-          </a>
-          <span class="product-price">1 × £20.00</span>
-        </li>
+        <?php endforeach; ?>
       </ul>
-      <p class="cart-total"><span>Subtotal:</span><span class="amount">£89.99</span></p>
+      <p class="cart-total"><span>Subtotal:</span><span class="amount">$<?php echo $order_total; ?> </span></p>
       <a class="btn-theme" data-margin-bottom="10" href="shop-cart.php">View cart</a>
       <a class="btn-theme" href="shop-checkout.php">Checkout</a>
-      <a class="d-block text-end lh-1" href="shop-checkout.php"><img src="assets/img/photos/paypal.webp" width="133" height="26" alt="Has-image"></a>
+
     </div>
   </div>
   <!--== End Aside Cart Menu ==-->
@@ -222,6 +170,7 @@
               <button class="search-button"><i class="fa fa-search"></i></button>
             </div>
           </form>
+            <?php endif;?>
         </div>
       </div>
     </div>
@@ -316,40 +265,39 @@
 
 </div>
 
-<!--=======================Javascript============================-->
+            <!--=======================Javascript============================-->
 
 
-<!--=== jQuery Modernizr Min Js ===-->
-<script src="assets/js/modernizr.js"></script>
-<!--=== jQuery Min Js ===-->
-<script src="assets/js/jquery-main.js"></script>
-<!--=== jQuery Migration Min Js ===-->
-<script src="assets/js/jquery-migrate.js"></script>
-<!--=== jQuery Popper Min Js ===-->
-<script src="assets/js/popper.min.js"></script>
-<!--=== jQuery Bootstrap Min Js ===-->
-<script src="assets/js/bootstrap.min.js"></script>
-<!--=== jQuery Ui Min Js ===-->
-<script src="assets/js/jquery-ui.min.js"></script>
-<!--=== jQuery Swiper Min Js ===-->
-<script src="assets/js/swiper.min.js"></script>
-<!--=== jQuery Fancybox Min Js ===-->
-<script src="assets/js/fancybox.min.js"></script>
-<!--=== jQuery Waypoint Js ===-->
-<script src="assets/js/waypoint.js"></script>
-<!--=== jQuery Parallax Min Js ===-->
-<script src="assets/js/parallax.min.js"></script>
-<!--=== jQuery Aos Min Js ===-->
-<script src="assets/js/aos.min.js"></script>
+            <!--=== jQuery Modernizr Min Js ===-->
+            <script src="assets/js/modernizr.js"></script>
+            <!--=== jQuery Min Js ===-->
+            <script src="assets/js/jquery-main.js"></script>
+            <!--=== jQuery Migration Min Js ===-->
+            <script src="assets/js/jquery-migrate.js"></script>
+            <!--=== jQuery Popper Min Js ===-->
+            <script src="assets/js/popper.min.js"></script>
+            <!--=== jQuery Bootstrap Min Js ===-->
+            <script src="assets/js/bootstrap.min.js"></script>
+            <!--=== jQuery Ui Min Js ===-->
+            <script src="assets/js/jquery-ui.min.js"></script>
+            <!--=== jQuery Swiper Min Js ===-->
+            <script src="assets/js/swiper.min.js"></script>
+            <!--=== jQuery Fancybox Min Js ===-->
+            <script src="assets/js/fancybox.min.js"></script>
+            <!--=== jQuery Waypoint Js ===-->
+            <script src="assets/js/waypoint.js"></script>
+            <!--=== jQuery Parallax Min Js ===-->
+            <script src="assets/js/parallax.min.js"></script>
+            <!--=== jQuery Aos Min Js ===-->
+            <script src="assets/js/aos.min.js"></script>
 
-<!--=== jQuery Custom Js ===-->
-<script src="assets/js/custom.js"></script>
-<!---       MAIN SCRIPT             -->
-<script src="js/main_app.js"></script>
+            <!--=== jQuery Custom Js ===-->
+            <script src="assets/js/custom.js"></script>
+            <!---       MAIN SCRIPT             -->
+            <script src="js/main_apps.js"></script>
+            
 
 
 </body>
 
-
-<!-- Mirrored from template.hasthemes.com/shome/shome/index.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 02 Dec 2021 14:26:08 GMT -->
 </html>

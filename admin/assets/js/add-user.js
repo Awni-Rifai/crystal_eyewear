@@ -11,44 +11,6 @@ var KTUsersAddUser = function () {
     var initAddUser = () => {
 
         // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-        var validator = FormValidation.formValidation(
-            form,
-            {
-                fields: {
-                    'user_name': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Full name is required'
-                            }
-                        }
-                    },
-                    'user_email': {
-                        validators: {
-                            notEmpty: {
-                                message: 'Valid email address is required'
-                            }
-                        }
-                    },
-                    'user_role': {
-                        validators: {
-                            notEmpty: {
-                                message: 'user role is required'
-                            }
-                        }
-                    },
-                },
-
-                plugins: {
-                    trigger: new FormValidation.plugins.Trigger(),
-                    bootstrap: new FormValidation.plugins.Bootstrap5({
-                        rowSelector: '.fv-row',
-                        eleInvalidClass: '',
-                        eleValidClass: ''
-                    })
-                }
-            }
-        );
-
         // // Submit button handler
         // const submitButton = element.querySelector('[data-kt-users-modal-action="submit"]');
         // submitButton.addEventListener('click', e => {

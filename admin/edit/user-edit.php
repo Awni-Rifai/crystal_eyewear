@@ -7,8 +7,21 @@
    	$stmt = $connection->prepare("SELECT * FROM user WHERE id={$_GET['id']}");
    	$stmt->execute();
    	$edit_user = $stmt->fetch(PDO::FETCH_ASSOC);
-   
+
+      $emailError ="";
+      $nameError ="";
+
    	if(isset($_POST["submit"])){
+         $check = true;
+         if(empty($_POST["username"])){
+            $check = false;
+            $nameError = "<span style='color:red'> Name cannot be empty </span>";
+         }
+         if(empty($_POST["email"])){
+            $check = false;
+            $emailError = "<span style='color:red'> Email cannot be empty </span>";
+         }
+      if($check == true){
    		$rand = rand(1,99999);
    		$userName  = $_POST["username"];
    		$userEmail = $_POST["email"];
@@ -23,7 +36,7 @@
          }
          if(move_uploaded_file($_FILES["image"]["tmp_name"],$destination)){
                echo  "<h1>image uploaded</h1>";
-         }else{
+         } else{
                echo "<h1>image not uploaded</h1>";
                }
       
@@ -34,9 +47,9 @@
    		WHERE id={$_GET['id']}");
    		$update->execute();
    		header("location:../users.php");
-   	}
-   
+      }
    }
+}
    
    ?>
 <!DOCTYPE html>
@@ -59,33 +72,12 @@
                            </div>
                            <div id="kt_account_settings_profile_details" class="collapse show">
                               <form id="kt_account_profile_details_form" method="post" class="form fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate" enctype="multipart/form-data">
-                                 <div class="card-body border-top p-9">
-                                    <div class="row mb-6">
-                                       <label class="col-lg-4 col-form-label fw-bold fs-6">Avatar</label>
-                                       <div class="col-lg-8">
-                                          <!-- image edit for user -->
-                                          <div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url(../assets/media/avatars/blank.png)">
-                                             <div class="image-input-wrapper w-125px h-125px" name="image" style="background-image: url(../assets/media/avatars/<?php echo $edit_user['image']; ?>)"></div>
-                                             <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="" data-bs-original-title="Change avatar">
-                                             <i class="bi bi-pencil-fill fs-7"></i>
-                                             <input type="file" name="image" accept=".png, .jpg, .jpeg">
-                                             <input type="hidden" name="avatar_remove">
-                                             </label>
-                                             <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="" data-bs-original-title="Cancel avatar">
-                                             <i class="bi bi-x fs-2"></i>
-                                             </span>
-                                             <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="" data-bs-original-title="Remove avatar">
-                                             <i class="bi bi-x fs-2"></i>
-                                             </span>
-                                          </div>
-                                          <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
-                                       </div>
-                                    </div>
                                     <!-- user full name edit from admin -->
                                     <div class="row mb-6">
                                        <label class="col-lg-4 col-form-label required fw-bold fs-6">Full Name</label>
                                        <div class="col-lg-8 fv-row fv-plugins-icon-container">
                                           <input type="text" name="username" class="form-control form-control-lg form-control-solid" placeholder="full name" value="<?php echo $edit_user['username']; ?>">
+                                          <div><?php echo $nameError?></div>
                                           <div class="fv-plugins-message-container invalid-feedback"></div>
                                        </div>
                                     </div>
@@ -95,6 +87,7 @@
                                        <div class="col-lg-8 fv-row fv-plugins-icon-container">
                                           <input type="email" name="email" class="form-control form-control-lg form-control-solid" placeholder="email" value="<?php echo $edit_user['email']; ?>">
                                           <div class="fv-plugins-message-container invalid-feedback"></div>
+                                          <div><?php echo $emailError?></div>
                                        </div>
                                     </div>
                                     <div class="row mb-6">

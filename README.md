@@ -2,9 +2,11 @@
 
 ## Synopsis
 
-This Project is an E_commerce website that sells sunglasses
-and eyeglasses for women, men, and kids.
-
+This Project is an E_commerce website that sells
+sunglasses and eyeglasses 
+for women, men, and kids.
+contains 2 interfaces 
+for the admin and one for the public.
 ## Contributors
 
 1- Ahmad Marwan Kilani (Product Owner).
@@ -59,7 +61,7 @@ Download Xampp on your computer to view this project.
 
 
 ## Wireframe
-
+https://miro.com/app/board/uXjVOdaMiyA=/
 
 ## Mockup
 

@@ -1,13 +1,21 @@
 <?php require_once "db.php"; ?>
 <?php require_once "functions.php" ?>
 <?php
+
 //here the red line is not actually a red line it's just from the require
 if (isset($_POST["register_submit"])) {
-    $dataArr = getPostData($_POST, ['username', 'email', 'password', 'password_confirmation']);
+    $dataArr = getPostData($_POST, ['username', 'email', 'password', 'password_confirmation',"full_name"]);
     $username = $dataArr[0];
     $email = $dataArr[1];
     $password = $dataArr[2];
     $password_confirmation = $dataArr[3];
+    $full_name = $dataArr[4];
+    //full name check
+    if($full_name===""){
+        header("Location:../account-register.php?full_name=the name should not be empty");
+        exit;
+    }
+
     validate_password($password);
     validate_email($email);
     confirm_password($password, $password_confirmation);
@@ -23,8 +31,8 @@ if (isset($_POST["register_submit"])) {
     }
     //encrypt the password
     $password = md5($password);
-    checkRepetition_and_showUsers($connection, true, "user", ['email', 'password'], [$email, $password], "../account-register.php");
-    crud($connection, "INSERT", "user", ['username', 'email', 'password'], [$username, $email, $password]);
+    checkRepetition_and_showUsers($connection, true, "user", ['email','username'], [$email,$username], "../account-register.php");
+    crud($connection, "INSERT", "user", ['username', 'email', 'password','full_name'], [$username, $email, $password,$full_name]);
     header("Location:../account-login.php?register=success");
     exit();
 }
@@ -64,9 +72,25 @@ if (isset($_POST['login_submit']) || (isset($_POST['checkout_login']))) {
             header("Location:../{$url}?password=password is wrong");
             exit();
         }
+        //login succeeded;
         session_start();
+        //Admin login
+        if($user_data['role']==="1"){
+            $_SESSION['admin_loggedin']=true;
+            $_SESSION['admin-name']=$user_data['username'];
+            $_SESSION['user_loggedin']=false;
+
+            header("Location:../admin");
+            exit();
+        }
+        //-----------------------------------
+        $_SESSION['admin_loggedin']=false;
         $_SESSION['user_loggedin'] = true;
-        $_SESSION['user_name']=$user_data['name'];
+        $_SESSION['user_name']=$user_data['username'];
+        $_SESSION['user_id']=$user_data['id'];
+        if (isset($_POST['login_submit'])) {
+            $url = "index.php";
+        }
         header("Location:../{$url}");
         exit();
     } elseif (validate_username($returned_array[0])) {
@@ -81,6 +105,7 @@ if (isset($_POST['login_submit']) || (isset($_POST['checkout_login']))) {
         $statement->bindValue(':username', $username);
         $statement->execute();
         $user_data = $statement->fetch(PDO::FETCH_ASSOC);
+
 
         //return error that the email doesn't exist
         if (!$user_data) {
@@ -97,6 +122,14 @@ if (isset($_POST['login_submit']) || (isset($_POST['checkout_login']))) {
         //--------------------------------------------------------
         //LOGIN SUCCEEDED
         session_start();
+        if($user_data['role']==="1"){
+            $_SESSION['admin_loggedin']=true;
+           $_SESSION['user_loggedin']=false;
+            $_SESSION['admin-name']=$user_data['username'];
+            header("Location:../admin");
+            exit();
+        }
+        $_SESSION['admin_loggedin']=false;
         $_SESSION['user_loggedin'] = true;
         $_SESSION['user_name']=$user_data['username'];
         $_SESSION['user_id']=$user_data['id'];
@@ -121,22 +154,103 @@ if(isset($_POST['country'])){
     $address_line=$_POST['address_line'];
     $counter=0;
     $comma=",";
-    foreach($_SESSION["shopping_cart"] as $product_arr):
-        if($counter===$i-1){
-            $comma=" ";
-        }
-        $cart_after_shopping.="id:{$product_arr['product_id']} name:{$product_arr['product_name']}
-                  price:{$product_arr['product_price']} price_onsale:{$product_arr['product_sale_price']}{$comma}";
-        $counter++;
-    endforeach;
-
 //insert to user_checkout
+    $cart_after_shopping=json_encode($_SESSION["shopping_cart"]);
     crud($connection, "INSERT", "order_summary",
         ["checkout_street_address","checkout_city","checkout_country"
             ,"checkout_phone", "order_total_price","user_id","order_status","cart_after_shopping"],
         [$address_line,$city,$country,$phone,$_SESSION['order_total'],$user_id,"pending",$cart_after_shopping]
          );
     unset($_SESSION["shopping_cart"]);
-    header("Location:../shop.php");
+    header("Location:../completed.php");
+    exit();
 
+}
+//logout logic
+if(isset($_GET['logout'])){
+    session_start();
+    if($_GET['logout']==true){
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_name']);
+        unset($_SESSION['user_loggedin']);
+        unset( $_SESSION['admin_loggedin']);
+        unset( $_SESSION['admin-name']);
+            header("Location:../index.php");
+        exit();
+    }
+}
+//----------------------------------------------------------kilani
+if(isset($_POST["account_kilani_submit"])){
+
+ 
+    session_start();
+    $id = (int)$_SESSION['user_id'];
+    $stmt = $connection->prepare("SELECT * FROM user WHERE id={$id}");
+    $stmt->execute();
+    $edit_user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $check = true;
+    
+    $emailError    ="";
+    $nameError     ="";
+    $passError     ="";
+    $newPassError  ="";
+    $confError     ="";
+
+       if(empty($_POST["name"])){
+          $check = false;
+          $nameError = "<span style='color:red'> Name cannot be empty </span>";
+       }
+       if(empty($_POST["email"])){
+          $check = false;
+          $emailError = "<span style='color:red'> Email cannot be empty </span>";
+       }
+    if($check == true){
+        $userName  = $_POST["name"];
+        $userEmail = $_POST["email"];
+        $password = $_POST["password"];//current pass you need to compare it with pass in DB
+        $new_password=$_POST['newPass'];
+        $conf_password=$_POST['confPass'];
+    //define conf pass......done
+    //check if the password matches the user password stored in DB......done
+    $string="";
+    $dont_change_password=true;
+    if(!empty($_POST['password'])){
+        $new_encrypted_pass=md5($new_password);
+        $string=",password='{$new_encrypted_pass}'";
+        $dont_change_password=false;
+        
+    }
+    if(md5($password) != $edit_user["password"] && !$dont_change_password){
+        header('location:../account.php?error=password is inccorect');
+    }
+    if($new_password==="" &&  !$dont_change_password ){
+        header("location:../account.php?error=password is empty");
+    }
+    if($new_password != $conf_password && !$dont_change_password){
+        header('location:../account.php?error=passwords dont match');
+    }
+
+    $update = $connection->prepare("UPDATE user SET username ='{$userName}',email ='{$userEmail}'{$string} WHERE id=$id");
+    $update->execute();
+    $_SESSION['user_name']=$userName;
+    header("location:../account.php");
+    //false=>header error to the user password dont''macyt........done
+    //header('../account.php?error=password dont match').......done
+    //true check for pass new and pass confirm if they match.....done
+    //false header()......done
+    //true store the new pass in the dataabse =>already done
+
+    //error duplicate email
+         ///DONT GO OUT OF THE IF STATEMENT
+    }
+}
+//logout admin
+if(isset($_POST['log_out_adminDash'])){
+    session_start();
+    $_SESSION['admin_loggedin']=false;
+    unset($_SESSION['admin_loggedin']);
+    unset($_SESSION['user_loggedin']);
+    unset($_SESSION['admin-name']);
+    header('location:../index.php');
+    exit();
 }

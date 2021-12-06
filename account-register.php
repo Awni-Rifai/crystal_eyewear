@@ -1,30 +1,10 @@
 
-<?php require_once "includes/public-header.php"?>
+<?php require_once "includes/public-header.php";
+?>
   <!--== End Header Wrapper ==-->
   <main class="main-content">
-    <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="assets/img/photos/bg3.webp">
-      <div class="container pt--0 pb--0">
-        <div class="row">
-          <div class="col-12">
-            <div class="page-header-content">
-              <h2 class="title" data-aos="fade-down" data-aos-duration="1000">Register</h2>
-              <nav class="breadcrumb-area" data-aos="fade-down" data-aos-duration="1200">
-                <ul class="breadcrumb">
-                  <li><a href="index.php">Home</a></li>
-                  <li class="breadcrumb-sep">//</li>
-                  <li>Register</li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--== End Page Header Area Wrapper ==-->
-
     <!--== Start My Account Area Wrapper ==-->
-    <section class="account-area">
+    <section class="account-area mt-5">
       <div class="container">
         <div class="row">
           <div class="col-sm-8 m-auto">
@@ -40,10 +20,19 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="username">name <span class="required">*</span></label>
+                      <label for="username">Username <span class="required">*</span></label>
                       <input id="username" class="form-control" name="username" type="text">
                         <?php if(isset($_GET["username"])):?>
                         <span class="text-danger"><?php echo $_GET["username"]; ?></span>
+                        <?php endif; ?>
+                    </div>
+                  </div>
+                    <div class="col-12">
+                    <div class="form-group">
+                      <label for="full_name">Name<span class="required">*</span></label>
+                      <input id="full_name" class="form-control" name="full_name" type="text">
+                        <?php if(isset($_GET["full_name"])):?>
+                        <span class="text-danger"><?php echo $_GET["full_name"]; ?></span>
                         <?php endif; ?>
                     </div>
                   </div>
@@ -79,6 +68,11 @@
                       <button class="btn-register" type="submit" name="register_submit">Register</button>
                     </div>
                   </div>
+                  <div class="col-12">
+                    <div class="form-group  mt-4">
+                     <span>If you have an account </span> <a class="lost-password" href="account-login.php">&nbsp;Login </a>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -89,5 +83,5 @@
     <!--== End My Account Area Wrapper ==-->
   </main>
 <?php
-    include("./includes/public-footer.php");
+    require_once("./includes/public-footer.php");
 ?>

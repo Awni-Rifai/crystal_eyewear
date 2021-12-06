@@ -2,14 +2,10 @@
 <html lang=en>
 <?php 
 include_once '../includes/db.php';
-// $id = 2;
-
-// echo "<pre>";
-
-// die;
 if (isset($_POST['add_sub_category_submit'])) {
     $rand = rand(1, 9999);
     $sub_cat_name = $_POST['sub_category_name'];
+	
     $sub_cat_desc = $_POST['sub_category_description'];
 	$cat_id=$_POST['category_id'];
     $destination =
@@ -39,43 +35,30 @@ if ($_GET) {
 		
 		$remove_product_erorr=true;
 	}
-	else{
-    $delete = $connection->prepare(
-        "DELETE FROM sub_category WHERE sub_category_id ={$id}");
-		$delete->execute();
-		}
+		 else if($num_of_products==0){
+		
+			$delete = $connection->prepare(
+				"DELETE FROM sub_category WHERE sub_category_id ={$id}");
+				$delete->execute();
+	 }
+	
+	
     
 }
 $stmt = $connection->prepare('SELECT * FROM sub_category');
 $stmt->execute();
 $sub_cats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 $stmt_cat = $connection->prepare('SELECT * FROM category');
 $stmt_cat->execute();
 $cats = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
-
-
-
 
 $sql = $connection->prepare(" SELECT * FROM sub_category INNER JOIN category ON category.category_id = sub_category.category_id ");
 										$sql->execute();
 									$result = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 
-// 		echo "<pre>";							
-// var_dump($result);
-// die;
-
-
-
 include_once 'layouts/head.php';
-
-
-
-
-
-
 ?>
 
 <body id=kt_body class="header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed" style=--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px>
@@ -159,10 +142,10 @@ include_once 'layouts/head.php';
 																	</div>
 																	<div class=form-text>Allowed file types: png, jpg, jpeg.</div>
 																</div>															
-																<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Full Name</label>
-																<input name=sub_category_name class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Full name" value="Emma Smith"></div>
-																<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Email</label>
-																<input type=text name=sub_category_description class="form-control form-control-solid mb-3 mb-lg-0" placeholder="category description" value="e.smith@kpmg.com.au"></div>
+																<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Subcategory Name</label>
+																<input name=sub_category_name class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Subcategory Name" ></div>
+																<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Subcategory Description</label>
+																<input type=text name=sub_category_description class="form-control form-control-solid mb-3 mb-lg-0" placeholder="subcategory description" ></div>
 																<div class=mb-7>
 																	<label class="required fs-6 fw-bold mb-2">Category</label>
 																	<select name="category_id" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select a Team Member" >
@@ -190,9 +173,10 @@ include_once 'layouts/head.php';
 								<div class="card-body pt-0">
 								<?php if (isset($remove_product_erorr)) {?>
 														<div class="alert alert-danger" role="alert">
-														<h4 class="alert-heading">You must delete all products from that related sub categores</h4>
+														<h4 class="alert-heading">This subcategory has related products, in order to delete this subcategory you must delete all the products that related to it</h4>
 													  </div>
 													<?php } ?>
+												
 													
 														
 													
@@ -206,6 +190,7 @@ include_once 'layouts/head.php';
 												<th class=min-w-125px>Subcategory Image</th>
 												<th class=min-w-125px>Category</th>
 												<th class=min-w-125px>Subcategory </th>
+												<th class=min-w-125px>Description</th>
 												
 
 												<th class="text-end min-w-100px">Actions</th>
@@ -226,7 +211,7 @@ include_once 'layouts/head.php';
 												</td>
 												<td><?php echo $sub_cat['category_name']; ?></td>
 												<td><?php echo $sub_cat['sub_category_name']; ?></td>
-												
+												<td><?php echo $sub_cat['sub_category_description']; ?></td>
 
 												<td class="pe-0 text-end">
 													<a href="edit/edit_subcategorie.php?sub_category_id=<?php echo $sub_cat['sub_category_id']; ?>" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
@@ -251,7 +236,7 @@ include_once 'layouts/head.php';
 														</span>
 													</a>
 													<?php }?>
-													<!-- <span class="aleart"></span> -->
+													
 													
 
 												</td>

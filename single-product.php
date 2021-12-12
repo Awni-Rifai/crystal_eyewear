@@ -42,7 +42,7 @@ if (isset($_POST["post"])) {
    <!--== End Page Header Area Wrapper ==-->
    <!--== Start Product Single Area Wrapper ==-->
    <section class="product-area product-single-area mt-5">
-      <div class="container">
+      <div class="container" style="padding-bottom: 0;">
          <div class="row">
             <div class="col-12">
                <div class="product-single-item">
@@ -121,7 +121,7 @@ if (isset($_POST["post"])) {
                         <a class="active" id="description-tab" data-bs-toggle="pill" href="#description" role="tab" aria-controls="description" aria-selected="false">Description</a>
                      </li>
                      <li role="presentation">
-                        <a id="reviews-tab" data-bs-toggle="pill" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews <span>(05)</span></a>
+                        <a id="reviews-tab" class="review_comment_button" data-bs-toggle="pill" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews <span>(<?php echo count($review)?? "" ?>)</span></a>
                      </li>
                   </ul>
                   <div class="tab-content product-tab-content" id="ReviewTabContent">
@@ -135,7 +135,7 @@ if (isset($_POST["post"])) {
                            <div class="review-content-header">
                               <h3>Customer Reviews</h3>
                               <div class="review-info">
-                                 <span class="review-write-btn">Write a review</span>
+                                 <span class="review-write-btn mb-2">Write a review</span>
                               </div>
                            </div>
                            <!--== Start Reviews Form Item ==-->
@@ -144,7 +144,9 @@ if (isset($_POST["post"])) {
                                     <?php
                                     $loggedin=$_SESSION['user_loggedin']?? null;
                                     if(!$loggedin) {?>
-                                   <div class=" h3 my-4">You need to sign in as a user in order to write a review</div> <?php }?>
+                                   <div class=" h4 my-4">You need to sign in as a user in order to write a review
+                                       <a href="account-login.php" class="btn-sm mx-2 btn-theme rounded btn">log in</a>
+                                   </div> <?php }?>
                                    <?php if(isset($_SESSION['user_id'])) {
 
                                    if($loggedin){?>
@@ -176,19 +178,36 @@ if (isset($_POST["post"])) {
                                </div>
                             <?php }}?>
                            <!--== End Reviews Form Item ==-->
-                           <div class="reviews-content-body">
-                             <?php  
-                            if(isset($review)){
-                             foreach ($review as $key) {?>
-                              <div class="review-item">
-                                  <h3><i class="fa fa-user m-3"></i><?php echo $key['username']?></h3>
-                                  <small class="text-muted"><?php echo $key["date_created"] ?></small>
-                                 <h3 class="title"><span class="font-weight-900">title:</span>  <?php echo $key["review_title"]  ?></h3>
-                                 <p><?php echo $key["review_comments"]  ?> </p>
-                              </div>
-                              <?php }} ?>
-                               <div class="alert-light">There is no review for this product</div>
+
                            </div>
+                         <div class="reviews-content-body">
+                             <?php
+                             if(isset($review)){
+                                 foreach ($review as $key) {
+                                     $random_number=rand(1,80);
+                                     $array_gender=["men","women"];
+                                     //$random_gender=rand(0,1);
+                                     ?>
+                                     <div class="review-item mt-4 mx-3">
+                                         <h5> <img class="comment_img ms-2 " src="https://randomuser.me/api/portraits<?php echo"/{$array_gender[0]}/{$random_number}";?>.jpg" alt="user" /><?php echo strtoupper($key['username'])?></h5>
+                                         <div class="row">
+                                             <div class="col-10"> <h5 class=" comment_title mx-1"><?php echo $key["review_title"]  ?></h5></div>
+                                             <div class="col-2"><small class="text-muted  align-self-end text-right my-1 d-inline-block"><?php echo $key["date_created"] ?></small></div>
+                                         </div>
+
+
+                                         <div class="tab-content w-auto h-auto  product-tab-content" id="ReviewTabContent">
+                                             <div class="tab-pane  fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                                                 <div class="product-description">
+                                                     <div class=""><?php echo $key["review_comments"]  ?> </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+
+                                     </div>
+                                 <?php }} else{ ?>
+                                 <div class="alert-light">There is no review for this product</div><?php } ?>
                         </div>
                      </div>
                   </div>

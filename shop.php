@@ -171,10 +171,6 @@ if (isset($_GET['sub_category_name'])) {
 
                <div class="shop-sidebar">
 
-
-                
-
-
                   <?php if (isset($_GET['category_name'])) {?>
                   <div class="shop-sidebar-category">
                      <h4 class="sidebar-title">Sub Category</h4>
@@ -188,9 +184,6 @@ if (isset($_GET['sub_category_name'])) {
                      </div>
                   </div>
                   <?php } ?>
-
-
-                  
 
                   <div class=" shop-sidebar-brand">
                      <h4 class="sidebar-title">Categories</h4>

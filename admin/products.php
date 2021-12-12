@@ -2,14 +2,17 @@
 include_once '../includes/db.php';
 $error_message = "";
 
-
+//add product
 if (isset($_POST["submit"])) {
 	$product_name  = $_POST['product_name'];
 	$product_price  = $_POST['product_price'];
 	$product_percentage_price  = $_POST['product_percentage_price'];
 	$product_description = $_POST['product_description'];
-	$product_category  = $_POST['category'];
 	$product_sub_category  = $_POST['subcategory'];
+    $statement=$connection->prepare("SELECT * from sub_category WHERE sub_category_id={$product_sub_category}");
+    $statement->execute();
+    $p=$statement->fetch(PDO::FETCH_ASSOC);
+    $product_category  = $p['category_id'];
 
 	$rand = rand(1, 99999);
 	$product_image = $rand . $_FILES["image"]["name"];
@@ -28,22 +31,13 @@ if (isset($_POST["submit"])) {
 	                             product_image,product_percentage_price, category_id, sub_category_id, featured_products) 
 		                         VALUES ('{$product_name}',{$product_price},'{$product_description}','{$product_image}', 
 								 '{$product_percentage_price}','{$product_category}', '{$product_sub_category}', '{$featured_product}')");
-
-	foreach ($new_product_info as $info) {
-		if ($info === "") {
-			$error_message = "Please Fill all fields to submit this product";
-		} else {
-			$error_message = "";
-		}
-	}
 	$strt->execute();
 
 	header("location:products.php");
 }
-$stmt = $connection->prepare('SELECT * FROM products');
-$stmt->execute();
-$all_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//------------------------------------------------------------------------------------------------------------------------------------------
 
+//delete products
 if ($_GET) {
 	$id = $_GET['product_id'];
 	$delete = $connection->prepare(
@@ -52,6 +46,12 @@ if ($_GET) {
 	$delete->execute();
 	header('location:products.php');
 }
+//------------------------------------------------------------------------------------------
+//select sub categories
+$sql2 = $connection->prepare("SELECT * FROM sub_category");
+$sql2->execute();
+//------------------------------------------------------------------------------------------------
+
 ?>
 <!DOCTYPE html>
 <html lang=en>
@@ -160,31 +160,18 @@ if ($_GET) {
 																	</label>
 																</div>
 																<div class="fv-row mb-7"><label class="required fw-bold fs-6 mb-2">Product Description</label><input type=text name="product_description" class="form-control form-control-solid mb-3 mb-lg-0" placeholder=add description required></div>
-																<div class=mb-7>
-																	<label class="required fs-6 fw-bold mb-2">Category</label>
-																	<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Category" name="category" required>
-																		<option value="">Select Category...</option>
-																		<?php
-																		$sql1 = $connection->prepare("SELECT * FROM category");
-																		$sql1->execute();
-																		$result1 = $sql1->fetchAll(PDO::FETCH_ASSOC);
-																		foreach ($result1 as $category) {
-																		?>
-																			<option value="<?php echo $category['category_id'] ?>"><?php echo $category['category_name'] ?></option>;
-																		<?php } ?>
-																	</select>
-																</div>
+
 																<div class=mb-7>
 																	<label class="required fs-6 fw-bold mb-2">Subcategory</label>
-																	<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Sub Category" name="subcategory" required>
-																		<option value="">Select Category...</option>
+																	<select class="sub_category_select form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Sub Category" name="subcategory" required>
+																		<option class="" value="">Select Category...</option>
 																		<?php
-																		$sql2 = $connection->prepare("SELECT * FROM sub_category");
-																		$sql2->execute();
-																		$result2 = $sql2->fetchAll(PDO::FETCH_ASSOC);
-																		foreach ($result2 as $sub_category) {
+
+																		$sub_categories = $sql2->fetchAll(PDO::FETCH_ASSOC);
+																		foreach ($sub_categories as $sub_category) {
 																		?>
-																			<option value="<?php echo $sub_category['sub_category_id'] ?>"><?php echo $sub_category['sub_category_name'] ?></option>;
+																			<option  value="<?php echo $sub_category['sub_category_id'] ?>"><?php echo $sub_category['sub_category_name'] ?></option>;
+
 																		<?php } ?>
 																	</select>
 																</div>
@@ -220,7 +207,7 @@ if ($_GET) {
 										if (!isset($_POST['searching_by_name'])) {
 											$sql = $connection->prepare("SELECT * FROM ((products
 																	INNER JOIN category ON category.category_id = products.category_id)
-																	INNER JOIN sub_category ON sub_category.sub_category_id = products.sub_category_id)");
+																	INNER JOIN sub_category ON sub_category.sub_category_id = products.sub_category_id) ORDER BY product_id DESC;");
 											$sql->execute();
 											$result = $sql->fetchAll(PDO::FETCH_ASSOC);
 											foreach ($result as $key => $value) {
@@ -337,6 +324,7 @@ if ($_GET) {
 	</script>
 	<!--begin::Javascript-->
 	<!--begin::Global Javascript Bundle(used by all pages)-->
+	<script src="../js/main_app.js" ></script>
 	<script src="assets/plugins/global/plugins.bundle.js"></script>
 	<script src="assets/js/scripts.bundle.js"></script>
 	<!--end::Global Javascript Bundle-->
@@ -347,6 +335,7 @@ if ($_GET) {
 	<script src="assets/js/users-table.js"></script>
 	<script src="assets/js/add-user.js"></script>
 	<script src="assets/js/custom/widgets.js"></script>
+	
 	<!--end::Page Custom Javascript-->
 </body>
 

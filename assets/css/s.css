@@ -14,3 +14,12 @@
 .error_not_found p {
     color: gray;
 }
+.form-control{
+    height: 50px !important;
+}
+.register-form-content .form-group .btn-register{
+    line-height: 47px !important;
+}
+.btn-login{
+    line-height: 47px !important;
+}

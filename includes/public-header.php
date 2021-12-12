@@ -11,6 +11,7 @@ if (isset($_POST['search_for_product'])) {
 <html lang="zxx">
 
 <head>
+
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,10 +21,10 @@ if (isset($_POST['search_for_product'])) {
   <!--        RELOAD              -->
   <meta http-equiv="refresh" content="<?php echo $RELOAD_TIMEOUT_MINUTES ?>">
 
-  <title>Shome - Shoes eCommerce Website Template</title>
+  <title>Crystal-Eyewear - The best place to buy glasses</title>
 
   <!--== Favicon ==-->
-  <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="assets/img/logo.webp" type="image/x-icon" />
 
   <!--== Google Fonts ==-->
   <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -45,7 +46,9 @@ if (isset($_POST['search_for_product'])) {
 
   <!--== Main Style CSS ==-->
   <link href="assets/css/style.css" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/update.css">
+  <link rel="stylesheet" href="assets/css/s.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/new_styles.css">
 
 </head>
 
@@ -71,13 +74,13 @@ if (isset($_POST['search_for_product'])) {
                     <div class="info-items">
                       <ul>
                         <li class="number"><i class="fa fa-phone"></i><a href="tel://0123456789">+00 123 456 789</a></li>
-                        <li class="email"><i class="fa fa-envelope"></i><a href="mailto://demo@example.com">demo@example.com</a></li>
+                        <li class="email"><i class="fa fa-envelope"></i><a href="mailto://demo@example.com">Crystaleyewear@info.jo</a></li>
                          <?php if(isset( $_SESSION['admin_loggedin'])){
                              if( $_SESSION['admin_loggedin']===true){?>
                                  <li class="account">
 
                                      <i class="fa fa-unlock"></i><a href="admin/index.php">Go to admin</a>
-                                     <i class="fa fa-user"></i><a class="account mx-3" href="account.php"> Admin <?php echo $_SESSION['admin-name'] ?? ""  ?></a>
+                                     <i class="fa fa-user"></i><a class="account mx-3" href=""> Admin <?php echo $_SESSION['admin-name'] ?? ""  ?></a>
                                  </li>
                                  <?php }
                              
@@ -87,10 +90,12 @@ if (isset($_POST['search_for_product'])) {
                         <li class="account"> 
                           <?php
                           $session_check= $_SESSION['user_loggedin']?? null;
+                          $admin_loggedin=$_SESSION['admin_loggedin']??null;
                           if ( $session_check) {?>
                           <i class="fa fa-user"></i><a class="account" href="account.php"><?php echo $_SESSION['user_name'] ?? ""  ?></a>
 
-                          <?php }else{?>  
+                          <?php }
+                          elseif(!$admin_loggedin){?>
 
                              <i class="fa fa-user"></i><a href="account-login.php">Log in</a>
                        <?php } ?>

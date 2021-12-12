@@ -12,6 +12,7 @@ const checkoutForm = document.querySelector('.checkout_form');
 const userAdminForm=document.querySelector('.add_user_form_admin');
 
 
+
 const renderError = function(msg, el, type) {
 
 
@@ -41,7 +42,8 @@ function validateCountry(country) {
 }
 
 function validateFullName(name) {
-    return (/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*$/g).test(name)
+    return (/(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/).test(name)
+
 }
 
 function validatePassword(pass) {
@@ -50,7 +52,7 @@ function validatePassword(pass) {
 }
 
 function validateUsername(username) {
-    return /^[a-zA-Z0-9_]{2,}[a-zA-Z]+[0-9]*$/.test(username);
+    return /^[a-zA-Z0-9_.]{2,}[a-zA-Z]+[0-9]*$/.test(username);
 }
 let emailCheck = false;
 let phoneCheck = false;
@@ -65,13 +67,13 @@ const checkEmpty = function(type, el) {
         /* if(el===checkInput){
                 if(!el.checked){
                     throw new Error(`The ${type} should be checked`)
-    
+
                 }
                 else{
                     removeError(el,type);
                     checkInputCheck=true;
                 }
-    
+
             }*/
 
         if (el.value === "") {
@@ -83,6 +85,25 @@ const checkEmpty = function(type, el) {
 
         }
 
+        if (type === "emailAdmin") {
+            if (!validateEmail(el.value)) {
+                emailCheck = false;
+                throw new Error('The email is not valid');
+
+            } else {
+                emailCheck = true;
+            }
+            const emails=document.querySelectorAll('.row-class-email');
+            emails.forEach(email=>{
+
+
+                if(email.innerText===el.value){
+                    throw new Error("The email already used");
+                }
+            })
+
+
+        }
         if (type === "email") {
             if (!validateEmail(el.value)) {
                 emailCheck = false;
@@ -113,7 +134,7 @@ const checkEmpty = function(type, el) {
 
         }
         if (type === 'fullname') {
-            if (!validateUsername(el.value)) {
+            if (!validateFullName(el.value)) {
                 fullNameCheck = false;
                 throw new Error('The name is not valid')
             } else {
@@ -316,11 +337,30 @@ const checkOutAdminUser=()=>{
     const fullName=document.querySelector('[name=user_name]');
     const email=document.querySelector('[name=user_email]');
     const password=document.querySelector('[name=password]');
+    const btnSubmit=document.querySelector('[name=submit]');
     fullName.addEventListener('blur',()=>{
         checkEmpty("fullName",fullName);
-        console.log("hello  ");
+
     })
-    
+    email.addEventListener('blur',()=>{
+        checkEmpty('emailAdmin',email);
+    })
+    password.addEventListener('blur',()=>{
+        checkEmpty('password',password);
+    })
+    btnSubmit.addEventListener('click',(e)=>{
+        const check1=checkEmpty("fullName",fullName);
+        const check2=checkEmpty('emailAdmin',email);
+        const check3=checkEmpty('password',password);
+        const check=check1 && check2 &check3;
+        if(!check){
+            e.preventDefault();
+        }
+        if(check){
+            submitForm(userAdminForm);
+        }
+    })
+
 }
 
 if (checkoutForm) {
@@ -328,4 +368,6 @@ if (checkoutForm) {
 }
 if(userAdminForm){
     checkOutAdminUser();
+
+
 }

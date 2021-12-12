@@ -222,7 +222,7 @@ if (isset($_POST["user_name"])) {
                                     </tr>
                                     </thead>
                                     <?php
-                                    $sql = $connection->prepare("SELECT * FROM user");
+                                    $sql = $connection->prepare("SELECT * FROM user ORDER BY role DESC");
                                     $sql->execute();
                                     $result = $sql->fetchAll(PDO::FETCH_ASSOC);
                                     foreach ($result
@@ -304,7 +304,7 @@ if (isset($_POST["user_name"])) {
 <script>
 
 </script>
-<script src="../js/main_app.js"></script>
+<script src="../js/main_app12.js"></script>
 <!--begin::Javascript-->
 <!--begin::Global Javascript Bundles(used by all pages)-->
 <script src="assets/plugins/global/plugins.bundle.js"></script>

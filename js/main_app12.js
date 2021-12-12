@@ -42,7 +42,7 @@ function validateCountry(country) {
 }
 
 function validateFullName(name) {
-    return (/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*$/g).test(name)
+    return (/(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/).test(name)
 
 }
 
@@ -134,7 +134,7 @@ const checkEmpty = function(type, el) {
 
         }
         if (type === 'fullname') {
-            if (!validateUsername(el.value)) {
+            if (!validateFullName(el.value)) {
                 fullNameCheck = false;
                 throw new Error('The name is not valid')
             } else {

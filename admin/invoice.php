@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
 																				</a>
 																			</div>
 																		</td>
-																		<td class="pt-11 fs-5 pe-lg-6 text-dark fw-boldest "><a href=../../demo1/dist/apps/product-management/products/view.html><?php echo $product->product_name; ?></a></td>
+																		<td class="pt-11 fs-5 pe-lg-6 text-dark fw-boldest "><a href="../single-product.php?id=<?php echo $product->product_id; ?>"><?php echo $product->product_name ?></a></td>
 																		<td class="pt-11 fs-5 pe-lg-6 text-dark fw-boldest"><?php echo  (int)((($product->product_price) * (100 - $product->product_percentage_price)) / 100) * ($product->product_quantity) ?></td>
 																	</tr>
 																<?php

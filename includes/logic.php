@@ -199,11 +199,22 @@ if(isset($_POST["account_kilani_submit"])){
        if(empty($_POST["name"])){
           $check = false;
           $nameError = "<span style='color:red'> Name cannot be empty </span>";
+          header("Location:../account.php?name=name cannot be empty");
+          exit();
        }
        if(empty($_POST["email"])){
           $check = false;
           $emailError = "<span style='color:red'> Email cannot be empty </span>";
+           header("Location:../account.php?email=email cannot be empty");
+           exit();
        }
+       if(empty($_POST["password"])){
+          $check = false;
+          $emailError = "<span style='color:red'> Email cannot be empty </span>";
+           header("Location:../account.php?password=in order to change anything you need to type ypur password");
+           exit();
+       }
+
     if($check == true){
         $userName  = $_POST["name"];
         $userEmail = $_POST["email"];
@@ -214,20 +225,23 @@ if(isset($_POST["account_kilani_submit"])){
     //check if the password matches the user password stored in DB......done
     $string="";
     $dont_change_password=true;
-    if(!empty($_POST['password'])){
+    if(!empty($new_password)){
         $new_encrypted_pass=md5($new_password);
         $string=",password='{$new_encrypted_pass}'";
         $dont_change_password=false;
         
     }
-    if(md5($password) != $edit_user["password"] && !$dont_change_password){
-        header('location:../account.php?error=password is inccorect');
+    if(md5($password) != $edit_user["password"]){
+        header('location:../account.php?password=password is incorrect');
+        exit();
     }
     if($new_password==="" &&  !$dont_change_password ){
         header("location:../account.php?error=password is empty");
+        exit();
     }
     if($new_password != $conf_password && !$dont_change_password){
-        header('location:../account.php?error=passwords dont match');
+        header('location:../account.php?conf=passwords dont match');
+        exit();
     }
 
     $update = $connection->prepare("UPDATE user SET username ='{$userName}',email ='{$userEmail}'{$string} WHERE id=$id");

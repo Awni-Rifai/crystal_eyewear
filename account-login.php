@@ -1,19 +1,15 @@
 <?php require_once "includes/public-header.php"?>
   <!--== End Header Wrapper ==-->
   <main class="main-content">
-
-
     <!--== Start My Account Area Wrapper ==-->
-    <section class="account-area mt-5">
-      <div class="container">
-
+    <section class="account-area">
+      <div class="container" style="padding-top:0px">
         <div class="row">
           <div class="col-sm-8 m-auto">
             <div class="section-title text-center">
               <h2 class="title">Login</h2>
             </div>
           </div>
-
         </div>
         <div class="row">
           <div class="col-12">
@@ -23,7 +19,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label for="username">Name or email address <span class="required">*</span></label>
-                      <input id="username" class="form-control" type="text" name="username">
+                      <input id="username" class="form-control" type="text" name="username" style="solid 1px #827e7e">
                         <?php if(isset($_GET["username"])):?>
                             <span class="text-danger"><?php echo $_GET["username"]; ?></span>
                         <?php endif; ?>
@@ -35,7 +31,7 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label for="password">Password <span class="required">*</span></label>
-                      <input id="password" name="password" class="form-control" type="password">
+                      <input id="password" name="password" class="form-control" type="password" style="solid 1px #827e7e">
                         <?php if(isset($_GET["password"])):?>
                             <span class="text-danger"><?php echo $_GET["password"]; ?></span>
                         <?php endif; ?>

@@ -9,11 +9,11 @@ contains 2 interfaces
 for the admin and one for the public.
 ## Contributors
 
-1- Ahmad Marwan Kilani (Product Owner).
+1- Awni Rifai .
 
-2- Mohammad abualhaj (Scrum Master).
+2- Mohammad abualhaj.
 
-3- Awni Rifai.
+3- Ahmed Kilani.
 
 4- Abdallh Samman.
 
@@ -21,18 +21,33 @@ for the admin and one for the public.
 
 ## Technologies
 
-1- HTML5.
+### Front-End
+  (i) HTML5 <br>
+  (ii) CSS3 <br>
+  (iii) JavaScript <br>
 
-2- CSS3.
+### Back-End
+  (i) PHP <br>
+  (ii) MySQL <br>
 
-3- Javascript.
+## Key Features
+### Public User
+(i) Search Product <br>
+(ii) View Product <br>
+(iii) Create User Account <br>
 
-4- Bootstrap.
+### Signin User
+(i) Search Product <br>
+(ii) View Product <br>
+(iii) Create Order <br>
+(iv) Change Email & Password <br>
+(v) Can View Previous Order with UPDATE and DELETE <br>
 
-5- php.
-
-6- MySQL.
-
+### Admin
+(i) Add New Product <br>
+(ii) Update Product <br>
+(iii) Delete Product <br>
+(iv) Confirm Order <br>
 ## Tools
 
 1- Google Chrome.
